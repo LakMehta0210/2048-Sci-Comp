@@ -69,27 +69,47 @@ def spawnTile(gameboard):
                 cell_state = 4
             else: cell_state = 2
             tileSpawned = True
-            print(tileSpawned)
             return cell_state, rand_y, rand_x
+
+def checkBoard(gameboard):
+    fullBoard = True
+    for y in range(len(gameboard)):
+        if gameboard[y].count(None) != 0:
+            fullBoard = False
+    return fullBoard
+
 
            
 while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-            sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+    Gameboard = [[None,None,None,None],
+                [None,None,None,None],
+                [None,None,None,None],
+                [None,None,None,None]]
+    reset = False
+    while not reset:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
                 sys.exit()
-            if event.key == pygame.K_SPACE:
-                spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
-                Gameboard[spawn_y][spawn_x] = spawn_cell_state
-    drawBoard(Gameboard)
-    Title = font.render("2048", True, (10, 96, 245))
-    Title_rect = Title.get_rect(center = (WIDTH/2, HEIGHT/2 - 256))
-    game_display.blit(Title, Title_rect)
-    pygame.display.update()
-    clock.tick(60)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    quit()
+                    sys.exit()
+                if event.key == ord('r'):
+                    reset = True
+                if event.key == pygame.K_SPACE:
+                    if not checkBoard(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                    else:
+                        reset = True
+        drawBoard(Gameboard)
+        Title = font.render("2048", True, (10, 96, 245))
+        Title_rect = Title.get_rect(center = (WIDTH/2, HEIGHT/2 - 256))
+        game_display.blit(Title, Title_rect)
+        pygame.display.update()
+        if reset:
+            break
+        clock.tick(60)
