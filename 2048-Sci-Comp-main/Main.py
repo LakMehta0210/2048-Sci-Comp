@@ -71,6 +71,16 @@ def spawnTile(gameboard):
             tileSpawned = True
             return cell_state, rand_y, rand_x
 
+
+def boardcheck(old_state, current_state):
+    same_board = True
+    for y in range(len(current_state):
+        for x in range(len(current_state[0]):
+            if old_state[y][x] != current_state[y][x]:
+                same_board = False
+                return same_board
+
+
 def boardFull(gameboard):
     fullBoard = True
     for y in range(len(gameboard)):
@@ -93,6 +103,7 @@ while True:
     old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
 
     reset = False
+    tile_spawned = False
     while not reset:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -110,8 +121,14 @@ while True:
                     if not boardFull(Gameboard):
                         spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
                         Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+
                     else:
                         reset = True
+        if tile_spawned and boardFull(old_state, Gameboard):
+            pass
+
+
         old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
         
         drawBoard(Gameboard)
