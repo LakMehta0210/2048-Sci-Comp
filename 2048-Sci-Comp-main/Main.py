@@ -1,6 +1,8 @@
 import pygame
 import numpy as np
 import ctypes
+import random
+import time
 
 user32 = ctypes.windll.user32
 screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -56,6 +58,19 @@ def drawBoard(gameboard):
                 num_rect = num.get_rect(center = (x_offset + scale*x+border + (scale-border)/2, y_offset + scale*y+border + (scale-border)/2))
                 game_display.blit(num, num_rect)
 
+def spawnTile(gameboard):
+    tileSpawned = False
+    while not tileSpawned:
+        rand_x = np.random.randint(0,4)
+        rand_y = np.random.randint(0,4)
+        if gameboard[rand_y][rand_x] == None:
+            tile_chance  = random.random()
+            if tile_chance < .1:
+                cell_state = 4
+            else: cell_state = 2
+            tileSpawned = True
+            print(tileSpawned)
+            return cell_state, rand_y, rand_x
 
            
 while True:
@@ -69,6 +84,9 @@ while True:
                 pygame.quit()
                 quit()
                 sys.exit()
+            if event.key == pygame.K_SPACE:
+                spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                Gameboard[spawn_y][spawn_x] = spawn_cell_state
     drawBoard(Gameboard)
     Title = font.render("2048", True, (10, 96, 245))
     Title_rect = Title.get_rect(center = (WIDTH/2, HEIGHT/2 - 256))
