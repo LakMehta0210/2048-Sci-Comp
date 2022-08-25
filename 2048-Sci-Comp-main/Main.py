@@ -88,6 +88,16 @@ def boardFull(gameboard):
             fullBoard = False
     return fullBoard
 
+def slideRight(gameboard):
+    for row in gameboard:
+        for i in range(len(row)-1,-1,-1):
+            if row[i] == None:
+                for x in range(i, -1, -1):
+                    if row[x] != None:
+                        row[i] = row[x]
+                        row[x] = None
+                        break
+
 
            
 while True:
