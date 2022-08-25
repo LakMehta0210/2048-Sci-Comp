@@ -97,6 +97,18 @@ def slideRight(gameboard):
                         row[i] = row[x]
                         row[x] = None
                         break
+    return gameboard
+
+def slideLeft(gameboard):
+    for row in gameboard:
+        for i in range(len(row)):
+            if row[i] == None:
+                for x in range(i,len(row)):
+                    if row[x] != None:
+                        row[i] = row[x]
+                        row[x] = None
+                        break
+    return gameboard
 
 
            
@@ -135,6 +147,10 @@ while True:
 
                     else:
                         reset = True
+                if (event.key == ord('d')) or (event.key == pygame.K_RIGHT):
+                    Gameboard = slideRight(Gameboard)
+                if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
+                    Gameboard = slideLeft(Gameboard)
         if tile_spawned and boardcheck(old_state, Gameboard):
             pass
 
@@ -149,5 +165,7 @@ while True:
         
         if reset:
             break
+        tile_spawned = False
         
         clock.tick(60)
+
