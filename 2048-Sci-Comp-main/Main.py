@@ -74,8 +74,8 @@ def spawnTile(gameboard):
 
 def boardcheck(old_state, current_state):
     same_board = True
-    for y in range(len(current_state):
-        for x in range(len(current_state[0]):
+    for y in range(len(current_state)):
+        for x in range(len(current_state[0])):
             if old_state[y][x] != current_state[y][x]:
                 same_board = False
                 return same_board
@@ -125,7 +125,7 @@ while True:
 
                     else:
                         reset = True
-        if tile_spawned and boardFull(old_state, Gameboard):
+        if tile_spawned and boardcheck(old_state, Gameboard):
             pass
 
 
