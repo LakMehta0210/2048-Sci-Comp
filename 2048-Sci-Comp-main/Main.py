@@ -90,6 +90,8 @@ while True:
     spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
     Gameboard[spawn_y][spawn_x] = spawn_cell_state
 
+    old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
+
     reset = False
     while not reset:
         for event in pygame.event.get():
@@ -110,11 +112,15 @@ while True:
                         Gameboard[spawn_y][spawn_x] = spawn_cell_state
                     else:
                         reset = True
+        old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
+        
         drawBoard(Gameboard)
         Title = font.render("2048", True, (10, 96, 245))
         Title_rect = Title.get_rect(center = (WIDTH/2, HEIGHT/2 - 256))
         game_display.blit(Title, Title_rect)
         pygame.display.update()
+        
         if reset:
             break
+        
         clock.tick(60)
