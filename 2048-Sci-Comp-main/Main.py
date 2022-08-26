@@ -137,6 +137,15 @@ def slideDown(gameboard):
         for index in range(len(column)):
             gameboard[index][col_ind] = column[index]
     return gameboard
+
+def horizontalCombine(gameboard):
+    for row in gameboard:
+        for i in range(len(row)-1):
+            if row[i] == row[i+1] and row[i] != None:
+                row[i] = row[i] + row[i+1]
+                row[i+1] = None
+    return gameboard
+
            
 while True:
     Gameboard = [[None,None,None,None],
@@ -175,12 +184,20 @@ while True:
                         reset = True
                 if (event.key == ord('d')) or (event.key == pygame.K_RIGHT):
                     Gameboard = slideRight(Gameboard)
+                    Gameboard = horizontalCombine(Gameboard)
+                    Gameboard = slideRight(Gameboard)
+
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
                     Gameboard = slideLeft(Gameboard)
+                    Gameboard = horizontalCombine(Gameboard)
+                    Gameboard = slideLeft(Gameboard)
+
                 if (event.key == ord('w')) or (event.key == pygame.K_UP):
                     Gameboard = slideUp(Gameboard)
+
                 if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
                     Gameboard = slideDown(Gameboard)
+
         if tile_spawned and boardcheck(old_state, Gameboard):
             pass
 
