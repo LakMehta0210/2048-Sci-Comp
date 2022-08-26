@@ -146,6 +146,16 @@ def horizontalCombine(gameboard):
                 row[i+1] = None
     return gameboard
 
+def verticalCombine(gameboard):
+    for col_ind in range(len(gameboard[0])):
+        column = [gameboard[k][col_ind] for k in range(len(gameboard))]
+        for i in range(len(column)-1):
+            if column[i] == column[i+1] and column[i] != None:
+                column[i] = column[i] + column[i+1]
+                column[i+1] = None
+        for index in range(len(column)):
+            gameboard[index][col_ind] = column[index]
+    return gameboard
            
 while True:
     Gameboard = [[None,None,None,None],
@@ -194,8 +204,12 @@ while True:
 
                 if (event.key == ord('w')) or (event.key == pygame.K_UP):
                     Gameboard = slideUp(Gameboard)
+                    Gameboard = verticalCombine(Gameboard)
+                    Gameboard = slideUp(Gameboard)
 
                 if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
+                    Gameboard = slideDown(Gameboard)
+                    Gameboard = verticalCombine(Gameboard)
                     Gameboard = slideDown(Gameboard)
 
         if tile_spawned and boardcheck(old_state, Gameboard):
