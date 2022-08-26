@@ -174,11 +174,27 @@ while True:
                     sys.exit()
                 if event.key == ord('r'):
                     reset = True
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_UP:
                     if not boardFull(Gameboard):
                         spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
                         Gameboard[spawn_y][spawn_x] = spawn_cell_state
                         tile_spawned = True
+                if event.key == pygame.K_DOWN:
+                    if not boardFull(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+                if event.key == pygame.K_RIGHT:
+                    if not boardFull(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+                if event.key == pygame.K_LEFT:
+                    if not boardFull(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+
 
                     else:
                         reset = True
