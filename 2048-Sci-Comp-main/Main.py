@@ -203,33 +203,53 @@ while True:
                     sys.exit()
                 if event.key == ord('r'):
                     reset = True
-                if event.key == pygame.K_SPACE:
+                        
+                if (event.key == ord('d')) or (event.key == pygame.K_RIGHT):
+                    Gameboard = slideRight(Gameboard)
+                    Gameboard = combineRight(Gameboard)
+                    Gameboard = slideRight(Gameboard)
                     if not boardFull(Gameboard):
                         spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
                         Gameboard[spawn_y][spawn_x] = spawn_cell_state
                         tile_spawned = True
                     else:
                         reset = True
-                        
-                if (event.key == ord('d')) or (event.key == pygame.K_RIGHT):
-                    Gameboard = slideRight(Gameboard)
-                    Gameboard = combineRight(Gameboard)
-                    Gameboard = slideRight(Gameboard)
 
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
                     Gameboard = slideLeft(Gameboard)
                     Gameboard = combineLeft(Gameboard)
                     Gameboard = slideLeft(Gameboard)
+                    if not boardFull(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+                    else:
+                        reset = True
+
 
                 if (event.key == ord('w')) or (event.key == pygame.K_UP):
                     Gameboard = slideUp(Gameboard)
                     Gameboard = combineUp(Gameboard)
                     Gameboard = slideUp(Gameboard)
+                    if not boardFull(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+                    else:
+                        reset = True
+
 
                 if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
                     Gameboard = slideDown(Gameboard)
                     Gameboard = combineDown(Gameboard)
                     Gameboard = slideDown(Gameboard)
+                    if not boardFull(Gameboard):
+                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                        tile_spawned = True
+                    else:
+                        reset = True
+
 
         if tile_spawned and boardcheck(old_state, Gameboard):
             pass
