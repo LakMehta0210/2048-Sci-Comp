@@ -110,7 +110,33 @@ def slideLeft(gameboard):
                         break
     return gameboard
 
+def slideUp(gameboard):
+    for col_ind in range(len(gameboard[0])):
+        column = [gameboard[k][col_ind] for k in range(len(gameboard))]
+        for i in range(len(column)):
+                if column[i] == None:
+                    for x in range(i,len(column)):
+                        if column[x] != None:
+                            column[i] = column[x]
+                            column[x] = None
+                            break
+        for index in range(len(column)):
+            gameboard[index][col_ind] = column[index]
+    return gameboard
 
+def slideDown(gameboard):
+    for col_ind in range(len(gameboard[0])):
+        column = [gameboard[k][col_ind] for k in range(len(gameboard))]
+        for i in range(len(column)-1, -1, -1):
+                if column[i] == None:
+                    for x in range(i,-1, -1):
+                        if column[x] != None:
+                            column[i] = column[x]
+                            column[x] = None
+                            break
+        for index in range(len(column)):
+            gameboard[index][col_ind] = column[index]
+    return gameboard
            
 while True:
     Gameboard = [[None,None,None,None],
@@ -151,6 +177,10 @@ while True:
                     Gameboard = slideRight(Gameboard)
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
                     Gameboard = slideLeft(Gameboard)
+                if (event.key == ord('w')) or (event.key == pygame.K_UP):
+                    Gameboard = slideUp(Gameboard)
+                if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
+                    Gameboard = slideDown(Gameboard)
         if tile_spawned and boardcheck(old_state, Gameboard):
             pass
 
