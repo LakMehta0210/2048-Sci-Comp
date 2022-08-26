@@ -138,7 +138,7 @@ def slideDown(gameboard):
             gameboard[index][col_ind] = column[index]
     return gameboard
 
-def horizontalCombine(gameboard):
+def combineLeft(gameboard):
     for row in gameboard:
         for i in range(len(row)-1):
             if row[i] == row[i+1] and row[i] != None:
@@ -146,7 +146,15 @@ def horizontalCombine(gameboard):
                 row[i+1] = None
     return gameboard
 
-def verticalCombine(gameboard):
+def combineRight(gameboard):
+    for row in gameboard:
+        for i in range(len(row)-1, 0, -1):
+            if row[i] == row[i-1] and row[i] != None:
+                row[i] = row[i] + row[i-1]
+                row[i-1] = None
+    return gameboard
+
+def combineUp(gameboard):
     for col_ind in range(len(gameboard[0])):
         column = [gameboard[k][col_ind] for k in range(len(gameboard))]
         for i in range(len(column)-1):
@@ -156,7 +164,18 @@ def verticalCombine(gameboard):
         for index in range(len(column)):
             gameboard[index][col_ind] = column[index]
     return gameboard
-           
+
+def combineDown(gameboard):
+    for col_ind in range(len(gameboard[0])):
+        column = [gameboard[k][col_ind] for k in range(len(gameboard))]
+        for i in range(len(column)-1, 0, -1):
+            if column[i] == column[i-1] and column[i] != None:
+                column[i] = column[i] + column[i-1]
+                column[i-1] = None
+        for index in range(len(column)):
+            gameboard[index][col_ind] = column[index]
+    return gameboard
+
 while True:
     Gameboard = [[None,None,None,None],
                 [None,None,None,None],
@@ -194,22 +213,22 @@ while True:
                         
                 if (event.key == ord('d')) or (event.key == pygame.K_RIGHT):
                     Gameboard = slideRight(Gameboard)
-                    Gameboard = horizontalCombine(Gameboard)
+                    Gameboard = combineRight(Gameboard)
                     Gameboard = slideRight(Gameboard)
 
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
                     Gameboard = slideLeft(Gameboard)
-                    Gameboard = horizontalCombine(Gameboard)
+                    Gameboard = combineLeft(Gameboard)
                     Gameboard = slideLeft(Gameboard)
 
                 if (event.key == ord('w')) or (event.key == pygame.K_UP):
                     Gameboard = slideUp(Gameboard)
-                    Gameboard = verticalCombine(Gameboard)
+                    Gameboard = combineUp(Gameboard)
                     Gameboard = slideUp(Gameboard)
 
                 if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
                     Gameboard = slideDown(Gameboard)
-                    Gameboard = verticalCombine(Gameboard)
+                    Gameboard = combineDown(Gameboard)
                     Gameboard = slideDown(Gameboard)
 
         if tile_spawned and boardcheck(old_state, Gameboard):
