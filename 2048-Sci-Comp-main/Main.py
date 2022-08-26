@@ -179,9 +179,9 @@ while True:
                         spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
                         Gameboard[spawn_y][spawn_x] = spawn_cell_state
                         tile_spawned = True
-
                     else:
                         reset = True
+                        
                 if (event.key == ord('d')) or (event.key == pygame.K_RIGHT):
                     Gameboard = slideRight(Gameboard)
                     Gameboard = horizontalCombine(Gameboard)
