@@ -59,6 +59,35 @@ def drawBoard(gameboard):
                 num_rect = num.get_rect(center = (x_offset + scale*x+border + (scale-border)/2, y_offset + scale*y+border + (scale-border)/2))
                 game_display.blit(num, num_rect)
 
+def gameEnd():
+    surface = pygame.Surface((WIDTH, HEIGHT))
+    surface.set_alpha(175)
+    pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH, HEIGHT))
+    game_display.blit(surface, (0,0))
+    endScreen = True
+
+    game_over = font.render("GAME OVER", True, (200,200,200))
+    game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
+    game_display.blit(game_over, game_over_rect)
+
+    while endScreen:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                endScreen = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                break
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+
+        instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
+        instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
+        game_display.blit(instructions, instructions_rect)
+
+        pygame.display.flip()
+        clock.tick(60)
+
 def spawnTile(gameboard):
     tileSpawned = False
     while not tileSpawned:
@@ -216,6 +245,7 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
+                        gameEnd()
                         reset = True
 
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
@@ -229,6 +259,7 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
+                        gameEnd()
                         reset = True
 
 
@@ -243,6 +274,7 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
+                        gameEnd()
                         reset = True
 
 
@@ -257,6 +289,7 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
+                        gameEnd()
                         reset = True
 
 
