@@ -20,6 +20,7 @@ border = 6
 x_offset = WIDTH/2 - 2*scale
 y_offset = HEIGHT/2 - 2*scale
 
+
 pygame.init()
 game_display = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("2048")
@@ -78,7 +79,7 @@ def boardcheck(old_state, current_state):
         for x in range(len(current_state[0])):
             if old_state[y][x] != current_state[y][x]:
                 same_board = False
-                return same_board
+    return same_board
 
 
 def boardFull(gameboard):
@@ -208,10 +209,12 @@ while True:
                     Gameboard = slideRight(Gameboard)
                     Gameboard = combineRight(Gameboard)
                     Gameboard = slideRight(Gameboard)
+
                     if not boardFull(Gameboard):
-                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
-                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
-                        tile_spawned = True
+                        if not boardcheck(old_state, Gameboard):
+                            spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                            Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                            tile_spawned = True
                     else:
                         reset = True
 
@@ -219,10 +222,12 @@ while True:
                     Gameboard = slideLeft(Gameboard)
                     Gameboard = combineLeft(Gameboard)
                     Gameboard = slideLeft(Gameboard)
+
                     if not boardFull(Gameboard):
-                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
-                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
-                        tile_spawned = True
+                        if not boardcheck(old_state, Gameboard):
+                            spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                            Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                            tile_spawned = True
                     else:
                         reset = True
 
@@ -231,10 +236,12 @@ while True:
                     Gameboard = slideUp(Gameboard)
                     Gameboard = combineUp(Gameboard)
                     Gameboard = slideUp(Gameboard)
+
                     if not boardFull(Gameboard):
-                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
-                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
-                        tile_spawned = True
+                        if not boardcheck(old_state, Gameboard):
+                            spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                            Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                            tile_spawned = True
                     else:
                         reset = True
 
@@ -243,10 +250,12 @@ while True:
                     Gameboard = slideDown(Gameboard)
                     Gameboard = combineDown(Gameboard)
                     Gameboard = slideDown(Gameboard)
+
                     if not boardFull(Gameboard):
-                        spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
-                        Gameboard[spawn_y][spawn_x] = spawn_cell_state
-                        tile_spawned = True
+                        if not boardcheck(old_state, Gameboard):
+                            spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
+                            Gameboard[spawn_y][spawn_x] = spawn_cell_state
+                            tile_spawned = True
                     else:
                         reset = True
 
