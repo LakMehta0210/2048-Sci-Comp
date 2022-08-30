@@ -63,20 +63,20 @@ def drawBoard(gameboard):
     game_display.blit(Title, Title_rect)
 
 def gameEnd():
-    surface = pygame.Surface((WIDTH, HEIGHT))
-    surface.set_alpha(175)
-    pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH, HEIGHT))
-    game_display.blit(surface, (0,0))
     endScreen = True
-
-    game_over = font.render("GAME OVER", True, (200,200,200))
-    game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
-    game_display.blit(game_over, game_over_rect)
-
     while endScreen:
         instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
         game_display.blit(instructions, instructions_rect)
+
+        surface = pygame.Surface((WIDTH, HEIGHT))
+        surface.set_alpha(15)
+        pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH, HEIGHT))
+        game_display.blit(surface, (0,0))
+
+        game_over = font.render("GAME OVER", True, (200,200,200))
+        game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
+        game_display.blit(game_over, game_over_rect)
 
         pygame.display.flip()
         clock.tick(60)
@@ -95,18 +95,18 @@ def gameEnd():
                 break
 
 def gameWin():
-    surface = pygame.Surface((WIDTH, HEIGHT))
-    surface.set_alpha(175)
-    pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH, HEIGHT))
-    game_display.blit(surface, (0,0))
     endScreen = True
-
-    game_over = font.render("GAME WON!!", True, (200,200,200))
-    game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
-    game_display.blit(game_over, game_over_rect)
-
-
+    
     while endScreen:
+        surface = pygame.Surface((WIDTH, HEIGHT))
+        surface.set_alpha(15)
+        pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH, HEIGHT))
+        game_display.blit(surface, (0,0))
+        
+        game_over = font.render("GAME WON!!", True, (2, 146, 250))
+        game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
+        game_display.blit(game_over, game_over_rect)
+
         instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
         game_display.blit(instructions, instructions_rect)
@@ -258,7 +258,7 @@ def checkCombines(gameboard):
 
 
 while True:
-    Gameboard = [[None,None,None,None],
+    Gameboard = [[1024,1024,None,None],
                 [None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None]]
