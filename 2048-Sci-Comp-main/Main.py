@@ -74,24 +74,25 @@ def gameEnd():
     game_display.blit(game_over, game_over_rect)
 
     while endScreen:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                endScreen = False
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                endScreen = False
-                pygame.quit()
-                break
-            if event.type == pygame.QUIT:
-                endScreen = False
-                pygame.quit()
-                break
-
         instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
         game_display.blit(instructions, instructions_rect)
 
         pygame.display.flip()
         clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                endScreen = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                endScreen = False
+                pygame.quit()
+                sys.exit()
+                break
+            if event.type == pygame.QUIT:
+                endScreen = False
+                pygame.quit()
+                sys.exit()
+                break
 
 def gameWin():
     surface = pygame.Surface((WIDTH, HEIGHT))
@@ -106,6 +107,12 @@ def gameWin():
 
 
     while endScreen:
+        instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
+        instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
+        game_display.blit(instructions, instructions_rect)
+
+        pygame.display.flip()
+        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 endScreen = False
@@ -117,13 +124,6 @@ def gameWin():
                 endScreen = False
                 pygame.quit()
                 break
-
-        instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
-        instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
-        game_display.blit(instructions, instructions_rect)
-
-        pygame.display.flip()
-        clock.tick(60)
 
 def spawnTile(gameboard):
     tileSpawned = False
@@ -146,7 +146,6 @@ def boardcheck(old_state, current_state):
             if old_state[y][x] != current_state[y][x]:
                 same_board = False
     return same_board
-
 
 def boardFull(gameboard):
     fullBoard = True
@@ -243,6 +242,21 @@ def combineDown(gameboard):
             gameboard[index][col_ind] = column[index]
     return gameboard
 
+
+def checkCombines(gameboard):
+    phantom_board = [[gameboard[y][x] for x in range(len(gameboard[0]))] for y in range(len(gameboard))]
+    combines = False
+    if not boardcheck(gameboard, combineUp(phantom_board)):
+        combines = True
+    elif not boardcheck(gameboard, combineDown(phantom_board)):
+        combines = True
+    elif not boardcheck(gameboard, combineLeft(phantom_board)):
+        combines = True
+    elif not boardcheck(gameboard, combineRight(phantom_board)):
+        combines = True
+    return combines
+
+
 while True:
     Gameboard = [[None,None,None,None],
                 [None,None,None,None],
@@ -282,8 +296,9 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
-                        gameEnd()
-                        reset = True
+                        if not checkCombines(Gameboard):
+                            gameEnd()
+                            reset = True
 
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
                     Gameboard = slideLeft(Gameboard)
@@ -296,8 +311,9 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
-                        gameEnd()
-                        reset = True
+                        if not checkCombines(Gameboard):
+                            gameEnd()
+                            reset = True
 
 
                 if (event.key == ord('w')) or (event.key == pygame.K_UP):
@@ -311,8 +327,9 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
-                        gameEnd()
-                        reset = True
+                        if not checkCombines(Gameboard):
+                            gameEnd()
+                            reset = True
 
 
                 if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
@@ -326,8 +343,9 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                             tile_spawned = True
                     else:
-                        gameEnd()
-                        reset = True
+                        if not checkCombines(Gameboard):
+                            gameEnd()
+                            reset = True
 
 
         old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
