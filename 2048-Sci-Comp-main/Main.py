@@ -258,7 +258,7 @@ def checkCombines(gameboard):
 
 
 while True:
-    Gameboard = [[1024,1024,None,None],
+    Gameboard = [[None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None]]
@@ -346,6 +346,8 @@ while True:
                         if not checkCombines(Gameboard):
                             gameEnd()
                             reset = True
+
+    def scoreboard:
 
 
         old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
