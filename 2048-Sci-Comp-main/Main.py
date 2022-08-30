@@ -65,7 +65,7 @@ def drawBoard(gameboard):
 def gameEnd():
     endScreen = True
     while endScreen:
-        instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
+        instructions = num_font.render("Press SPACE to restart", True, (255,255,0))
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
         game_display.blit(instructions, instructions_rect)
 
@@ -74,7 +74,7 @@ def gameEnd():
         pygame.draw.rect(surface, (0,0,0), (0,0,WIDTH, HEIGHT))
         game_display.blit(surface, (0,0))
 
-        game_over = font.render("GAME OVER", True, (200,200,200))
+        game_over = font.render("GAME OVER", True, ((255, 0, 0)))
         game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
         game_display.blit(game_over, game_over_rect)
 
@@ -107,7 +107,7 @@ def gameWin():
         game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
         game_display.blit(game_over, game_over_rect)
 
-        instructions = num_font.render("Press SPACE to restart", True, (200,200,200))
+        instructions = num_font.render("Press SPACE to restart", True, (255,255,0))
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
         game_display.blit(instructions, instructions_rect)
 
