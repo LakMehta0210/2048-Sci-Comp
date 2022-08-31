@@ -347,7 +347,6 @@ while True:
                             gameEnd()
                             reset = True
 
-    def scoreboard:
 
 
         old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
