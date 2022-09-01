@@ -40,7 +40,8 @@ color_dict = {"None": GRAY,
 				"256": (155, 210, 250),
 				"512": (102, 191, 255),
 				"1024": (59, 173, 255),
-				"2048": (2, 146, 250)}
+				"2048": (2, 146, 250),
+                "Over": (0, 255, 183)}
 
 
 Gameboard = [[None,2,4,8],
@@ -53,7 +54,11 @@ def drawBoard(gameboard):
     for y in range(len(gameboard)):
         for x in range(len(gameboard[0])):
             #if gameboard[y][x] == 0:
-            pygame.draw.rect(game_display, color_dict[str(gameboard[y][x])], (x_offset + scale*x+border, y_offset + scale*y+border, scale-border, scale-border), border_radius = border)
+            if gameboard[y][x] == None:
+                color = color_dict[str(gameboard[y][x])]
+            elif gameboard[y][x] <= 2048: color = color_dict[str(gameboard[y][x])]
+            else: color = color_dict["Over"]
+            pygame.draw.rect(game_display, color, (x_offset + scale*x+border, y_offset + scale*y+border, scale-border, scale-border), border_radius = border)
             if str(gameboard[y][x]) != "None":
                 num = num_font.render(str(gameboard[y][x]), True, (0,0,0))
                 num_rect = num.get_rect(center = (x_offset + scale*x+border + (scale-border)/2, y_offset + scale*y+border + (scale-border)/2))
@@ -96,7 +101,8 @@ def gameEnd():
 
 def gameWin():
     endScreen = True
-    
+    continuing = False
+    reset = True
     while endScreen:
         surface = pygame.Surface((WIDTH, HEIGHT))
         surface.set_alpha(15)
@@ -111,11 +117,19 @@ def gameWin():
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 100))
         game_display.blit(instructions, instructions_rect)
 
+        instructions = num_font.render("Press ENTER to keep playing", True, (255,255,0))
+        instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 150))
+        game_display.blit(instructions, instructions_rect)
+
         pygame.display.flip()
         clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 endScreen = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                endScreen = False
+                continuing = True
+                reset = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 endScreen = False
                 pygame.quit()
@@ -124,6 +138,7 @@ def gameWin():
                 endScreen = False
                 pygame.quit()
                 break
+    return reset, continuing
 
 def spawnTile(gameboard):
     tileSpawned = False
@@ -258,8 +273,8 @@ def checkCombines(gameboard):
 
 
 while True:
-    Gameboard = [[None,None,None,None],
-                [None,None,None,None],
+    Gameboard = [[1024,1024,None,None],
+                [1024,1024,None,None],
                 [None,None,None,None],
                 [None,None,None,None]]
     spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
@@ -270,6 +285,7 @@ while True:
     old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
 
     reset = False
+    continuing = False
     tile_spawned = False
     while not reset:
         for event in pygame.event.get():
@@ -357,9 +373,8 @@ while True:
 
         for y in range(len(Gameboard)):
             for x in range(len(Gameboard[0])):
-                if Gameboard[y][x] == 2048:
-                    gameWin()
-                    reset = True
+                if Gameboard[y][x] == 2048 and continuing == False:
+                    reset, continuing = gameWin()
 
         drawBoard(Gameboard)
         pygame.display.update()
