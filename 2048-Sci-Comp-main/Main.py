@@ -273,8 +273,8 @@ def checkCombines(gameboard):
 
 
 while True:
-    Gameboard = [[1024,1024,None,None],
-                [1024,1024,None,None],
+    Gameboard = [[None,None,None,None],
+                [None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None]]
     spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
