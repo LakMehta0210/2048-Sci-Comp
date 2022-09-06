@@ -75,10 +75,15 @@ def drawBoard(gameboard, score):
     Title_rect = Title.get_rect(center = (WIDTH/2, HEIGHT/2 - 256))
     game_display.blit(Title, Title_rect)
 
+    #draws the score underneath the gameboard
     Score = num_font.render(f'Score: {score}', True, (10, 96, 245))
     Score_rect = Score.get_rect(topright = (WIDTH/2 + 2*scale, HEIGHT/2 + 2*scale + 16))
     #game_display.blit(Score, (WIDTH/2 + 2*scale - 132, HEIGHT/2 + 2*scale + 16))
     game_display.blit(Score, Score_rect)
+
+    Reset_R = num_font.render("Press R to Restart", True, (255, 255, 255))
+    Reset_R_rect = Reset_R.get_rect(topright = (WIDTH/2 + 2*scale, HEIGHT/2 + 2*scale + 64))
+    game_display.blit(Reset_R, Reset_R_rect)
 
 
 def gameEnd(score):
@@ -328,7 +333,7 @@ def checkCombines(gameboard):
 
 while True:
     #creates empty Gameboard
-    Gameboard = [[1024,1024,None,None],
+    Gameboard = [[None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None]]
