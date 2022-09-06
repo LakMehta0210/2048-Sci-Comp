@@ -354,7 +354,25 @@ while True:
     step = 0
 
     while not reset:
-        if not step % 15:
+        #creates a list of all inputs into computer
+        for event in pygame.event.get():
+            #checks if person hits X button in top right of the screen
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                sys.exit()
+            #filters for events where keys are pressed
+            if event.type == pygame.KEYDOWN:
+                #Escape key exits the game
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    quit()
+                    sys.exit()
+                #R restarts the game
+                if event.key == ord('r'):
+                    reset = True
+        
+        if not step % 6:
             move = np.random.randint(0,4)
             if move == 0:    
                 #algorithm to create desired tiles
