@@ -23,7 +23,7 @@ border = 6
 x_offset = WIDTH/2 - 2*scale
 y_offset = HEIGHT/2 - 2*scale
 
-#basic pygame setup, including creating a screen, labeling the window, 
+#basic pygame setup, including creating a screen and labeling the window. This code designs the title 2048 above our game board.
 pygame.init()
 game_display = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("2048")
@@ -31,7 +31,7 @@ clock = pygame.time.Clock()
 #fonts
 font = pygame.font.Font('freesansbold.ttf', 100)
 num_font = pygame.font.Font('freesansbold.ttf', 32)
-#This code designs the title 2048 above our game board.
+
 
 
 color_dict = {"None": GRAY,
@@ -76,12 +76,12 @@ def drawBoard(gameboard, score):
     game_display.blit(Title, Title_rect)
 
     #draws the score underneath the gameboard
-    Score = num_font.render(f'Score: {score}', True, (10, 96, 245))
+    Score = num_font.render(f'Score: {score}', True, (3, 252, 198))
     Score_rect = Score.get_rect(topright = (WIDTH/2 + 2*scale, HEIGHT/2 + 2*scale + 16))
     #game_display.blit(Score, (WIDTH/2 + 2*scale - 132, HEIGHT/2 + 2*scale + 16))
     game_display.blit(Score, Score_rect)
 
-    Reset_R = num_font.render("Press R to Restart", True, (255, 255, 255))
+    Reset_R = num_font.render("Press R to Restart", True, (255,255,0))
     Reset_R_rect = Reset_R.get_rect(topright = (WIDTH/2 + 2*scale, HEIGHT/2 + 2*scale + 64))
     game_display.blit(Reset_R, Reset_R_rect)
 
