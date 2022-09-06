@@ -3,6 +3,7 @@ import numpy as np
 import ctypes
 import random
 import time
+import sys
 
 #user32 = ctypes.windll.user32
 #screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
@@ -48,7 +49,7 @@ color_dict = {"None": GRAY,
                 "Over": (0, 255, 183)}
 #This color dictionary allows you to pull colors for each of the twelve tile values from 2 to 2048. This makes the code more efficient later on. Since we coded our game to go over 2048, the "Over" allows us to have colors for higher value tiles.
 
-def drawBoard(gameboard):
+def drawBoard(gameboard, score):
     #Makes the screen black
     game_display.fill((0,0,0))
 
@@ -74,8 +75,13 @@ def drawBoard(gameboard):
     Title_rect = Title.get_rect(center = (WIDTH/2, HEIGHT/2 - 256))
     game_display.blit(Title, Title_rect)
 
+    Score = num_font.render(f'Score: {score}', True, (10, 96, 245))
+    Score_rect = Score.get_rect(topright = (WIDTH/2 + 2*scale, HEIGHT/2 + 2*scale + 16))
+    #game_display.blit(Score, (WIDTH/2 + 2*scale - 132, HEIGHT/2 + 2*scale + 16))
+    game_display.blit(Score, Score_rect)
 
-def gameEnd():
+
+def gameEnd(score):
     #creates a secondary gameloop holding the player until the player presses space
     endScreen = True
     while endScreen:
@@ -94,6 +100,10 @@ def gameEnd():
         game_over = font.render("GAME OVER", True, ((255, 0, 0)))
         game_over_rect = game_over.get_rect(center = (WIDTH/2, HEIGHT/2))
         game_display.blit(game_over, game_over_rect)
+
+        Score = num_font.render(f"Score: {score}", True, (3, 252, 198))
+        Score_rect = Score.get_rect(center = (WIDTH/2, HEIGHT/2 + 160))
+        game_display.blit(Score, Score_rect)
 
         pygame.display.flip()
         clock.tick(60)
@@ -114,7 +124,7 @@ def gameEnd():
                 break
 
 #Structurally similar to GameEnd, but added the variables of continuing and reset, writing different instructions as well.
-def gameWin():
+def gameWin(score):
     endScreen = True
 
     #defaults for the continuing and reset variables which help decide whether or not to continue playing
@@ -141,6 +151,10 @@ def gameWin():
         instructions = num_font.render("Press ENTER to keep playing", True, (255,255,0))
         instructions_rect = instructions.get_rect(center = (WIDTH/2, HEIGHT/2 + 150))
         game_display.blit(instructions, instructions_rect)
+
+        Score = num_font.render(f"Score: {score}", True, (3, 252, 198))
+        Score_rect = Score.get_rect(center = (WIDTH/2, HEIGHT/2 + 200))
+        game_display.blit(Score, Score_rect)
 
         pygame.display.flip()
         clock.tick(60)
@@ -253,66 +267,68 @@ def slideDown(gameboard):
     return gameboard
 
 #sees if two numbers beside each other are the same, adding the two and then making one empty
-def combineLeft(gameboard):
+def combineLeft(gameboard, score):
     for row in gameboard:
         for i in range(len(row)-1):
             if row[i] == row[i+1] and row[i] != None:
                 row[i] = row[i] + row[i+1]
+                score += row[i]
                 row[i+1] = None
-    return gameboard
+    return gameboard, score
 
 #same as combineLeft just starting from the other side and comparing a tile with the tile to the left instead of right
-def combineRight(gameboard):
+def combineRight(gameboard, score):
     for row in gameboard:
         for i in range(len(row)-1, 0, -1):
             if row[i] == row[i-1] and row[i] != None:
                 row[i] = row[i] + row[i-1]
+                score += row[i]
                 row[i-1] = None
-    return gameboard
+    return gameboard, score
 
 #same column list creation in slideUp and same algorirthm as other combines
-def combineUp(gameboard):
+def combineUp(gameboard, score):
     for col_ind in range(len(gameboard[0])):
         column = [gameboard[k][col_ind] for k in range(len(gameboard))]
         for i in range(len(column)-1):
             if column[i] == column[i+1] and column[i] != None:
                 column[i] = column[i] + column[i+1]
+                score += column[i]
                 column[i+1] = None
         for index in range(len(column)):
             gameboard[index][col_ind] = column[index]
-    return gameboard
+    return gameboard, score
 
 #same column list creation in slideUp and same algorirthm as other combines
-def combineDown(gameboard):
+def combineDown(gameboard, score):
     for col_ind in range(len(gameboard[0])):
         column = [gameboard[k][col_ind] for k in range(len(gameboard))]
         for i in range(len(column)-1, 0, -1):
             if column[i] == column[i-1] and column[i] != None:
                 column[i] = column[i] + column[i-1]
+                score += column[i]
                 column[i-1] = None
         for index in range(len(column)):
             gameboard[index][col_ind] = column[index]
-    return gameboard
+    return gameboard, score
 
 #checks to see if there are possible combines for when the board is full to make sure their aren't false losses
 def checkCombines(gameboard):
     phantom_board = [[gameboard[y][x] for x in range(len(gameboard[0]))] for y in range(len(gameboard))]
     combines = False
     #boardcheck used to see if combines had any effect
-    if not boardcheck(gameboard, combineUp(phantom_board)):
+    up_state, _ = combineUp(phantom_board, 0)
+    left_state, _ = combineLeft(phantom_board, 0)
+    if not boardcheck(gameboard, up_state):
         combines = True
-    elif not boardcheck(gameboard, combineDown(phantom_board)):
-        combines = True
-    elif not boardcheck(gameboard, combineLeft(phantom_board)):
-        combines = True
-    elif not boardcheck(gameboard, combineRight(phantom_board)):
+    elif not boardcheck(gameboard, left_state):
         combines = True
     return combines
 
 
 while True:
     #creates empty Gameboard
-    Gameboard = [[None,None,None,None],
+    Gameboard = [[1024,1024,None,None],
                 [None,None,None,None],
                 [None,None,None,None],
                 [None,None,None,None]]
@@ -329,6 +345,8 @@ while True:
     #initialization of variables in for loop
     reset = False
     continuing = False
+
+    score = 0
 
     while not reset:
         #creates a list of all inputs into computer
@@ -354,7 +372,7 @@ while True:
                     
                     #algorithm to create desired tiles
                     Gameboard = slideRight(Gameboard)
-                    Gameboard = combineRight(Gameboard)
+                    Gameboard, score = combineRight(Gameboard, score)
                     Gameboard = slideRight(Gameboard)
 
                     #checks if board is full to spawn tiles or not
@@ -367,13 +385,13 @@ while True:
                         #checks if there are any valid moves left
                         if not checkCombines(Gameboard):
                             #ends game if no possible moves
-                            gameEnd()
+                            gameEnd(score)
                             reset = True
 
                 #other directions are the same code, just changing which slide and combine algorithms used
                 if (event.key == ord('a')) or (event.key == pygame.K_LEFT):
                     Gameboard = slideLeft(Gameboard)
-                    Gameboard = combineLeft(Gameboard)
+                    Gameboard, score = combineLeft(Gameboard, score)
                     Gameboard = slideLeft(Gameboard)
 
                     if not boardFull(Gameboard):
@@ -382,28 +400,29 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                     else:
                         if not checkCombines(Gameboard):
-                            gameEnd()
+                            gameEnd(score)
                             reset = True
 
 
                 if (event.key == ord('w')) or (event.key == pygame.K_UP):
                     Gameboard = slideUp(Gameboard)
-                    Gameboard = combineUp(Gameboard)
+                    Gameboard, score = combineUp(Gameboard, score)
                     Gameboard = slideUp(Gameboard)
 
                     if not boardFull(Gameboard):
                         if not boardcheck(old_state, Gameboard):
+
                             spawn_cell_state, spawn_y, spawn_x = spawnTile(Gameboard)
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                     else:
                         if not checkCombines(Gameboard):
-                            gameEnd()
+                            gameEnd(score)
                             reset = True
 
 
                 if (event.key == ord('s')) or (event.key == pygame.K_DOWN):
                     Gameboard = slideDown(Gameboard)
-                    Gameboard = combineDown(Gameboard)
+                    Gameboard, score = combineDown(Gameboard, score)
                     Gameboard = slideDown(Gameboard)
 
                     if not boardFull(Gameboard):
@@ -412,15 +431,17 @@ while True:
                             Gameboard[spawn_y][spawn_x] = spawn_cell_state
                     else:
                         if not checkCombines(Gameboard):
-                            gameEnd()
+                            gameEnd(score)
                             reset = True
+
+
 
 
         #updates old_state for comparison with the next board
         old_state =  [[Gameboard[y][x] for x in range(len(Gameboard[0]))] for y in range(len(Gameboard))]
         
         #draws board
-        drawBoard(Gameboard)
+        drawBoard(Gameboard, score)
         pygame.display.update()
 
         #checks to see if game is won
@@ -428,11 +449,12 @@ while True:
             for x in range(len(Gameboard[0])):
                 if Gameboard[y][x] == 2048 and continuing == False:
                     #only runs this code if player hasn't already agreed to continue
-                    reset, continuing = gameWin()
+                    reset, continuing = gameWin(score)
 
         #updates board after win so the 2048 square shows
         #drawBoard(Gameboard)
         #pygame.display.update()
+
 
         #sets FPS to 60
         clock.tick(60)
