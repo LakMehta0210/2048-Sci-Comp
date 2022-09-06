@@ -372,7 +372,7 @@ while True:
                 if event.key == ord('r'):
                     reset = True
         
-        if not step % 6:
+        if not step % 15:
             move = np.random.randint(0,4)
             if move == 0:    
                 #algorithm to create desired tiles
